@@ -19,9 +19,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    NetWorkStateReceiver netWorkStateReceiver;
-    NetworkCallbackImpl networkCallback;
-    ConnectivityManager connectivityManager;
+    private NetWorkStateReceiver netWorkStateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // sdk>=24 采用回调
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            networkCallback = new NetworkCallbackImpl();
-            connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkCallback);
-        } else {
-
-        }
-
         netWorkStateReceiver = new NetWorkStateReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -69,55 +58,8 @@ public class MainActivity extends AppCompatActivity {
         if (netWorkStateReceiver != null) {
             unregisterReceiver(netWorkStateReceiver);
         }
-        if (connectivityManager != null && networkCallback != null) {
-            connectivityManager.unregisterNetworkCallback(networkCallback);
-        }
     }
 
-    private class NetworkCallbackImpl extends ConnectivityManager.NetworkCallback {
-
-        // 网络可用
-        @Override
-        public void onAvailable(Network network) {
-            super.onAvailable(network);
-            Log.e("tag", "onAvailable:" + network.toString());
-        }
-
-        // 网络失去连接的时候回调，但是如果是一个生硬的断开，他可能不回调
-        @Override
-        public void onLosing(Network network, int maxMsToLive) {
-            super.onLosing(network, maxMsToLive);
-            Log.e("tag", "onLosing:");
-        }
-
-        // 网络丢失
-        @Override
-        public void onLost(Network network) {
-            super.onLost(network);
-            Log.e("tag", "onLost:");
-        }
-
-        // 当网络的某个能力发生了变化回调，可能会回调多次
-        @Override
-        public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
-            super.onCapabilitiesChanged(network, networkCapabilities);
-            Log.e("tag", "onCapabilitiesChanged:" + networkCapabilities.toString());
-        }
-
-        // 当建立网络连接时，回调连接的属性
-        @Override
-        public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
-            super.onLinkPropertiesChanged(network, linkProperties);
-            Log.e("tag", "onLinkPropertiesChanged:" + linkProperties.toString());
-        }
-
-        // 如果在超时时间内都没有找到可用的网络时进行回调
-        @Override
-        public void onUnavailable() {
-            super.onUnavailable();
-            Log.e("tag", "onUnavailable:");
-        }
-    }
 
     public class NetWorkStateReceiver extends BroadcastReceiver {
         @Override
