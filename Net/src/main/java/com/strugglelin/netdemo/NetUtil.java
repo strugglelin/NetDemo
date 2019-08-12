@@ -8,7 +8,6 @@ import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +77,7 @@ public class NetUtil {
 
         NetworkInfo ni = cm.getActiveNetworkInfo();// 获取当前网络状态
 
-        int netType ;
+        int netType;
 
         if (ni != null && ni.isConnectedOrConnecting()) {
 
@@ -188,6 +187,7 @@ public class NetUtil {
         }
         return false;
     }
+
     public static boolean isNetworkAvailable2(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) {
@@ -205,6 +205,7 @@ public class NetUtil {
         }
         return false;
     }
+
     /**
      * 判断网络是否可用
      * 需添加权限
