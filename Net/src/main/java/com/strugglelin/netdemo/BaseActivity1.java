@@ -39,7 +39,7 @@ public class BaseActivity1 extends AppCompatActivity {
     public class NetWorkStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (NetUtil.isConnected(context)) {
+            if (NetUtil.isNetworkAvailable2(context)) {
                 onSuccessNetwork();
             } else {
                 onFailNetwork();
